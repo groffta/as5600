@@ -4,28 +4,24 @@ from cffi import FFI
 
 ffi = FFI()
 ffi.cdef("""
-    typedef void* Context;
+    typedef void* AS5600;
 
-    Context context(char* path);
-    double angle(Context ctx);
-    void test(Context ctx);
+    AS5600 open_as5600_ffi(char* path);
+    double get_angle_ffi(AS5600 encoder);
+    void test_ffi(AS5600 encoder);
 """)
 
 C = ffi.dlopen(f"/home/{os.environ['USER']}/.local/lib/libas5600.so")
 
-def run():
-    ctx = C.get_context(b"/dev/i2c-2")
-    print(C.angle(ctx))
-
 class AS5600:
     def __init__(self, path):
-        self.ctx = C.context(path)
+        self.ptr = C.open_as5600_ffi(path)
 
     def angle(self):
-        return C.angle(self.ctx)
+        return C.get_angle_ffi(self.ptr)
 
     def test(self):
-        C.test(self.ctx)
+        C.test_ffi(self.ptr)
 
 if __name__ == "__main__":
     encoder = AS5600(b"/dev/i2c-2")
