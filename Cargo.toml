@@ -1,0 +1,11 @@
+[package]
+name = "as5600"
+version = "0.2.0"
+authors = ["Todd Groff"]
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"] # Compiles as a rust lib and a C shared object for ffi
+
+[dependencies]
+linux-embedded-hal = "0.3.0"
