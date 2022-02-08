@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import os
 from cffi import FFI
 
 ffi = FFI()
@@ -10,7 +11,7 @@ ffi.cdef("""
     void test(Context ctx);
 """)
 
-C = ffi.dlopen("/home/tag/.local/lib/libas5600.so")
+C = ffi.dlopen(f"/home/{os.environ['USER']}/.local/lib/libas5600.so")
 
 def run():
     ctx = C.get_context(b"/dev/i2c-2")
@@ -28,5 +29,5 @@ class AS5600:
 
 if __name__ == "__main__":
     encoder = AS5600(b"/dev/i2c-2")
-    encoder.test()
-    # while(True): print(encoder.angle())
+    encoder.test()  # this runs the read loop in rust at 200hz
+    # while(True): print(encoder.angle())   # This runs the read loop in python as fast as possible 
